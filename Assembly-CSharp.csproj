@@ -6,7 +6,7 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{18CB132F-B0A9-7DBC-F09F-43B24E153745}</ProjectGuid>
+	<ProjectGuid>{F6269EE6-DE72-A5BA-BBCC-7218067B3D5F}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
@@ -79,11 +79,17 @@
      <None Include="Assets\Characters\Yurowm\Shaders\SkinShader.shader" />
      <None Include="Assets\Characters\Character\ReadMe.txt" />
      <None Include="Assets\Characters\Yurowm\ReadMe.txt" />
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>D:/Downloads/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Downloads/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>D:/Downloads/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Analytics">
+ <HintPath>D:/Downloads/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>D:/Downloads/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>

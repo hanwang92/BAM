@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     int prev = 0;
 
     float inAirMultiplier = 0.25f;
-    float speed = 8f;
+    float speed = 6f;
     
     void Start()
     {
