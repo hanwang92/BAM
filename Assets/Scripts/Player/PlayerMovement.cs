@@ -16,25 +16,25 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity = new Vector3();
     Quaternion startRot;
     Quaternion endRot;
-
     Animator atr;
 
-    int counter = 0;
-    int counter2 = 0;
-    int counter3 = 0;
-    int[] myIntArray = new int[15];
-    //int[] myIntArray = new int[60];
-    bool inWalk = false;
+    int counter = 0;                            // General use counter
+    int counter_damaged = 0;                    // Counter for when damaged
+    int counter_array = 0;                      // Counter for updating int array
+
+    int[] myIntArray = new int[15];             // Array to hold last 15 frame states
+
+    bool inWalk = false;                        // Boolean variables to determine if in a certain state
     bool inAttack = false;
     bool inAim = false;
     bool inTransition = false;
     bool fired = false;
 
-    // prev: idle = 0, move = 1, attack = 2, aim = 3, transition = 4, take damage = 5 
-    int prev = 0;
+    int prev = 0;                               // Holds state of last frame
+                                                // prev: idle = 0, move = 1, attack = 2, aim = 3, transition = 4, take damage = 5 
 
-    float inAirMultiplier = 0.25f;
-    float speed = 6f;
+    float inAirMultiplier = 0.25f;              
+    float speed = 6f;                           // Walking speed
     
     void Start()
     {
@@ -53,19 +53,19 @@ public class PlayerMovement : MonoBehaviour
             {
                 atr.CrossFade("Damaged", 0);
                 atr.SetBool("Damaged", true);
-                if (counter2 > 13)
+                if (counter_damaged > 13)
                 {
-                    counter2 = 0;
+                    counter_damaged = 0;
                     playerHealth.isDamaged = false;
                 }
                 prev = 5;
-                counter2++;
+                counter_damaged++;
             }
             else
             {
                 atr.SetBool("Damaged", false);
                 
-                //shoot if left mouse pressed
+                // Shoot if left mouse pressed
                 if (Input.GetMouseButton(0))
                 {
                     atr.CrossFade("Attack", 0);
@@ -80,13 +80,13 @@ public class PlayerMovement : MonoBehaviour
                     prev = 2;
 
                 }
-                //walk if "WASD" pressed and not shooting
+                // Walk if "WASD" pressed and not shooting
                 else if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && (!Input.GetMouseButton(0)))
                 {
-                    //check if previous updates included shooting 
+                    // Check if previous updates included shooting 
                     if (Array.Exists(myIntArray, ContainsValue1))
                     {
-                        //do nothing
+                        // Do nothing
                     }
                     else
                     {
@@ -94,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
                         {
                             atr.CrossFade("Walk", 0);
                             atr.SetBool("Walk", true);
-
                         }
 
                         atr.SetBool("Attack", false);
@@ -104,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
                         prev = 1;
                     }
                 }
-                //return to aiming after shooting
+                // Return to aiming after shooting
                 else if (prev == 2 || prev == 3)
                 {
                     atr.SetBool("Walk", false);
@@ -120,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
                         prev = 3;
                     counter++;
                 }
-                //transition state between aim and next state
+                // Transition state between aim and next state
                 else if (prev == 4)
                 {
                     atr.SetBool("Walk", false);
@@ -134,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
                     }
                     counter++;
                 }
-                //go to idle state if none other states satisfied
+                // Go to idle state if none other states satisfied
                 else
                 {
                     atr.SetBool("Walk", false);
@@ -148,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
         else if (!gameFlow.inPause)
             atr.CrossFade("Damaged", 0);
 
-        //update array to include previous shooting times
+        // Update array to include previous shooting times
         if (Input.GetMouseButton(0))
         {
             updateIntArray(1);
@@ -156,10 +155,10 @@ public class PlayerMovement : MonoBehaviour
         else
             updateIntArray(0);
 
-        counter3++;
+        counter_array++;
     }
 
-    //rotate player upper body up/down while shooting
+    // Rotate player upper body up/down with camera while shooting
     void LateUpdate()
     {
         if ((Input.GetMouseButton(0) || prev == 2 || prev == 3)&&(!playerHealth.isDead) && (!gameFlow.inPause))
@@ -172,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Walk()
     {
-        //determine player "WASD" rotation 
+        // Determine player "WASD" rotation 
         var z = Input.GetKey(KeyCode.W) ? 0.0f : 0;
         z = Input.GetKey(KeyCode.S) ? 180.0f : z;
 
@@ -182,7 +181,7 @@ public class PlayerMovement : MonoBehaviour
         movement.z = speed * z;
         movement.x = speed * x;
 
-        //determine player "WD,SD,AS,AW" rotation
+        // Determine player "WD,SD,AS,AW" rotation
         var rotAngle = z + x;
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
         {
@@ -203,9 +202,8 @@ public class PlayerMovement : MonoBehaviour
         Quaternion camRot = new Quaternion(player.rotation.x, cam.rotation.y, player.rotation.z, cam.rotation.w);
         player.rotation = camRot;
         player.Rotate(0, rotAngle, 0);
-        //pivot.Rotate(0, -rotAngle, 0);
 
-        //determine walking speed
+        // Determine walking speed
         velocity.y += Physics.gravity.y * Time.deltaTime;
         movement.x *= inAirMultiplier;
         movement.z *= inAirMultiplier;
@@ -216,12 +214,11 @@ public class PlayerMovement : MonoBehaviour
         transform.GetComponent<CharacterController>().Move(transform.forward * speed * Time.deltaTime);
     }
 
-    //rotate player left/right while shooting
+    // Rotate player left/right with camera while shooting
     void Shoot()
     {
         Quaternion camRot_y = new Quaternion(player.rotation.x, cam.rotation.y, player.rotation.z, cam.rotation.w);
         player.rotation = camRot_y;
-        //player.Rotate(0, 10, 0);
     }
 
     void Rotate(float angle)
@@ -233,11 +230,12 @@ public class PlayerMovement : MonoBehaviour
         upperBody.Rotate(-rotAngle, 0, 0);
     }
 
+    // Update an array with val for later use
     void updateIntArray(int val)
     {
-        if (counter3 > myIntArray.Length-1)
-            counter3 = 0;
-        myIntArray[counter3] = val;
+        if (counter_array > myIntArray.Length-1)
+            counter_array = 0;
+        myIntArray[counter_array] = val;
     }
 
     private bool ContainsValue1(int val)
@@ -247,9 +245,9 @@ public class PlayerMovement : MonoBehaviour
     
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        Debug.Log(hit.collider.tag);
+        //Debug.Log(hit.collider.tag);
 
-        //if (!hit.collider.tag.Contains("Laser") && ((!hit.collider.tag.Contains("Orb")) && (!orbHealth.isDead)))
+        // Player dies if hits orb or soldier
         if (!hit.collider.tag.Contains("Laser")&& !hit.collider.tag.Contains("Floor"))
         {
             playerHealth.TakeDamage(100);

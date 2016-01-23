@@ -70,9 +70,6 @@ public class EnemyController : MonoBehaviour
     
     void OnHit(RayAndHit rayAndHit)
     {
-        //Debug.Log("Hit");
-        //Debug.Log(transform.tag);
-        // Add a big force impact from the bullet hit
-        //GetComponent<Rigidbody>().AddForce(rayAndHit.ray.direction * 0.1f, ForceMode.Impulse);
+        // Empty
     }
 }

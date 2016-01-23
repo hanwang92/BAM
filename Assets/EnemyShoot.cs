@@ -7,8 +7,7 @@ public class EnemyShoot : MonoBehaviour
     public Transform muzzle;
     public Transform target;
 
-    int counter = 0;
-
+    //create and shoot a laser object when firing
     public void Fire(Vector3 dir, Quaternion rot)
     {
         Transform laser = Instantiate(laserPrefab, muzzle.position, muzzle.rotation) as Transform;

@@ -25,7 +25,6 @@ public class camera_position_follow : MonoBehaviour {
     private float angleH = 0;
     private float angleV = 0;
 
-    // Use this for initialization
     void Start()
     {
         // Add player's own layer to mask
@@ -37,7 +36,6 @@ public class camera_position_follow : MonoBehaviour {
 
         cam = transform;
         smoothPlayerPos = player.position;
-        //cam.position = player.forward * 10.0f;
         maxCamDist = 3;
     }
 
@@ -48,9 +46,9 @@ public class camera_position_follow : MonoBehaviour {
             return;
 
         angleH += Mathf.Clamp(Input.GetAxis("Mouse X"), -1, 1) * horizontalAimingSpeed * Time.deltaTime;
-
         angleV += Mathf.Clamp(Input.GetAxis("Mouse Y"), -1, 1) * verticalAimingSpeed * Time.deltaTime;
-        // limit vertical angle
+        
+        // Limit vertical angle
         angleV = Mathf.Clamp(angleV, minVerticalAngle, maxVerticalAngle);
 
         // Before changing camera, store the prev aiming distance.
@@ -101,95 +99,12 @@ public class camera_position_follow : MonoBehaviour {
         aimTarget.position = cam.position + cam.forward * aimTargetDist;
     }
 
+    // Draw the crossair
     void OnGUI()
     {
         float scale = 0.1f;
         if (Time.time != 0 && Time.timeScale != 0)
             GUI.DrawTexture(new Rect(Screen.width / 2 - (reticle.width * 0.5f * scale), Screen.height / 2 - (reticle.height * 0.5f * scale), reticle.width*scale, reticle.height*scale), reticle);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /***** Own **********
-    public float fWidth = 9.0f;         // Desired width 
-    public float distanceAway;          // distance from the back of the craft
-    public float distanceUp;            // distance above the craft
-    public float smooth;                // how smooth the camera movement is
-    private Vector3 targetPosition;     // the position the camera is trying to be in
-
-    float horizontalSpeed = 140.0f;
-    float verticalSpeed = 140.0f;
-
-
-    Transform the_player; 
-
-    void Start()
-    {
-        /*
-        float fT = fWidth / Screen.width * Screen.height;
-        fT = fT / (2.0f * Mathf.Tan(0.5f * Camera.main.fieldOfView * Mathf.Deg2Rad));
-        Vector3 v3T = Camera.main.transform.position;
-        v3T.z = -fT;
-        transform.position = v3T;
-        
-
-        the_player = GameObject.Find("Player").transform;
-
-        transform.position = new Vector3(2.932574e-06f, 2.999999f, 8.999997f);
-        transform.rotation = Quaternion.Euler(11.30993f, 180.0f, 0.0f);
-       
-    }
-
-    void Update()
-    {          
-        float h = horizontalSpeed * Input.GetAxis("Mouse Y") * Time.deltaTime;
-        float v = verticalSpeed * Input.GetAxis("Mouse X") * Time.deltaTime;
-        //transform.Translate(v, 0, 0);
-        transform.RotateAround(the_player.position, the_player.right, h);
-        transform.RotateAround(the_player.position, the_player.up, v);
-
-
-
-        // setting the target position to be the correct offset from the hovercraft
-        //targetPosition = the_camera.position + Vector3.up * Input.GetAxis("Mouse Y") - the_camera.forward * distanceAway;
-
-        // making a smooth transition between it's current position and the position it wants to be in
-        //transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smooth);
-
-
-        // make sure the camera is looking the right way!
-        //transform.LookAt(the_camera.transform.position + the_camera.transform.forward * 6);
-
-    }
-
-    ****************/
+    
 }

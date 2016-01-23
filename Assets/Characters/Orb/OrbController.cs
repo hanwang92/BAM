@@ -15,8 +15,6 @@ public class OrbController : MonoBehaviour
 
     // Variable to be animated
     public float flyLerp = 0;
-
-    int counter = 0;
 	
 	// Is the turret folded out?
 	private bool unfolded = false;
@@ -28,7 +26,6 @@ public class OrbController : MonoBehaviour
 	
 	private bool gotBehindYet = false;
 	private LayerMask mask;
-	//private AudioSource gunAudioSource;
 		
 	private Vector3 aimTarget { get { return player.transform.position + new Vector3(0, 1.4f, 0); } }
 	
@@ -106,14 +103,13 @@ public class OrbController : MonoBehaviour
 			// Find a rotation that points at that target
 			Quaternion aimRot = Quaternion.LookRotation(aimDirInLocalSpace);
             
-            // Smoothly rotate the turret towards the target rotation
+            // Set max upper and lower rotation bounds and smoothly rotate the turret towards the target rotation
             float target = aimRot.eulerAngles.x;
             if (target > 60f)
                 target = 60f;
             if (target < 11f)
                 target = 11f;
 
-            //float newEulerX = TurnTowards(turret.transform.localEulerAngles.x, aimRot.eulerAngles.x, aimSpeed * Time.deltaTime);
             float newEulerX = TurnTowards(turret.transform.localEulerAngles.x, target, aimSpeed * Time.deltaTime);
             turret.transform.localEulerAngles = new Vector3(newEulerX, 0, 0);
 		}
@@ -131,7 +127,6 @@ public class OrbController : MonoBehaviour
         //float minHeightAbove = 1.5f;
         float minHeightAbove = 6.0f;
 
-        //if (Physics.Raycast(flyTarget+5*Vector3.up, -Vector3.up, out hit, 10)) {
         if (Physics.Raycast(flyTarget + 5 * Vector3.up, -Vector3.up, out hit, 10))
         {
             if (hit.point.y > flyTarget.y - minHeightAbove)
@@ -142,7 +137,6 @@ public class OrbController : MonoBehaviour
 		mask.value = 1;
         if (Physics.CheckCapsule(oldFlyTarget, flyTarget, 1.2f, mask))
             return false;
-            //return true;
 		
 		return true;
 	}
@@ -227,6 +221,7 @@ public class OrbController : MonoBehaviour
 		return CanShootTargetFromPosition(turret.position);
 	}
 	
+    // Check if orb can shoot player
 	public bool CanShootTargetFromPosition (Vector3 fromPosition) {
 		Vector3 target = player.transform.position + new Vector3(0, 1.4f, 0);
 		Vector3 shootDir = (target - fromPosition).normalized;
@@ -248,7 +243,7 @@ public class OrbController : MonoBehaviour
 		Ray ray = new Ray(turret.position, shootDir);
 		RaycastHit hit;
 
-        //fireTrail.localRotation = Quaternion.Euler(0, 0, Random.Range(-360, 360));
+        // Transform laser into beam
         fireTrail.forward = shootDir;
         fireTrail.localScale = new Vector3(0.008f, 0.008f, 1.2f);
         
@@ -265,18 +260,10 @@ public class OrbController : MonoBehaviour
 	}
 	
 	void OnHit (RayAndHit rayAndHit) {
-        
         if (!GetComponent<OrbHealth>().isDead)
         {
-            // Add a big force impact from the bullet hit
-            //GetComponent<Rigidbody>().AddForce(rayAndHit.ray.direction * 200, ForceMode.Impulse);
-            //GetComponent<Rigidbody>().AddForce(rayAndHit.ray.direction * 10, ForceMode.Impulse);
-
-            // Sometimes, also AddForceAtPosition - this adds some rotation as well.
-            // We don't want to allow this too often, otherwise the orb, when being hit constantly,
-            // will aim so bad that it's too easy to win.
-            //if (Random.value < 0.2f)
-                //GetComponent<Rigidbody>().AddForceAtPosition(rayAndHit.ray.direction * 5, rayAndHit.hit.point, ForceMode.Impulse);
+            // Add a force impact from the bullet hit
+            //GetComponent<Rigidbody>().AddForce(rayAndHit.ray.direction * 200, ForceMode.Impulse);            
         }
     }
 	
@@ -301,11 +288,10 @@ public class OrbController : MonoBehaviour
 		return current + turnAngle;
 	}
 
+    // Turn turret towards target
     public static float TurnTurret(float current, float target, float maxDegreesDelta)
     {
-        //maxDegreesDelta = 1000f * Time.deltaTime;
         float angleDifference = Mathf.Repeat(target - current + 180, 360) - 180;
-        //float turnAngle = maxDegreesDelta * Mathf.Sign(angleDifference);
         float turnAngle = 1000f * Time.deltaTime * Mathf.Sign(angleDifference);
         
         if (Mathf.Abs(turnAngle) > Mathf.Abs(angleDifference))
@@ -316,7 +302,6 @@ public class OrbController : MonoBehaviour
     }
 
     IEnumerator ShowLaser () {
-		// Show laser when firing
         fireTrail.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.05f);
     }

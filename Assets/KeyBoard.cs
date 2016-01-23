@@ -19,7 +19,7 @@ public class KeyBoard : MonoBehaviour {
         img.color = col;
     }
 
-    // Update is called once per frame
+    // Fade in
     void Update () {
         if (img.enabled)
         {

@@ -7,20 +7,19 @@ public class OrbHealth : MonoBehaviour
     public Transform fireTrail;
     public GameObject GUIPrefab;
     public GameObject head;
-    public int startingHealth;                            // The amount of health the orb starts the game with.
-    public int currentHealth;                                   // The current health the player has.
-    public Slider healthSlider;                                 // Reference to the UI's health bar.
+    public int startingHealth;                                  // The amount of health the orb starts the game with
+    public int currentHealth;                                   // The current health the player has
+    public Slider healthSlider;                                 // Reference to the UI's health bar
 
     public Image background;
     public Image fill;
     public Image name;
     public Image other_background;
-    public Image other_fill;
-    public Image other_name;
-    public Image damageImage;                                   // Reference to an image to flash on the screen on being hurt.
+    public Image other_fill;                                    
+    public Image other_name;                                    
 
-    public bool isDead;                                                // Whether the player is dead.
-    bool damaged;                                               // True when the player gets damaged.
+    public bool isDead;                                         // Whether the orb is dead
+    bool damaged;                                               // True when the orb gets damaged
     bool aimed;
     int counter = 0;
     int damagedValue;
@@ -28,7 +27,7 @@ public class OrbHealth : MonoBehaviour
 
     void Awake()
     {
-        // Set the initial health of the player.
+        // Set the initial health of the player
         currentHealth = startingHealth;
     }
 
@@ -41,6 +40,7 @@ public class OrbHealth : MonoBehaviour
 
     void Update()
     {
+        // Show orb health when aimed by player
         if (aimed)
         {
             background.enabled = true;
@@ -51,6 +51,7 @@ public class OrbHealth : MonoBehaviour
             other_name.enabled = false;
             counter = 0;
         }
+        // Hide orb health after certain time not aimed by player
         else if (counter > 200)
         {
             background.enabled = false;
@@ -59,7 +60,7 @@ public class OrbHealth : MonoBehaviour
             counter = 0;
         }
 
-        // Reset the damaged flag.
+        // Reset the damaged flag
         damaged = false;
         aimed = false;
         counter++;
@@ -70,14 +71,14 @@ public class OrbHealth : MonoBehaviour
     {
         if (!isDead)
         {
-            // Set the damaged flag so the screen will flash.
+            // Set damage value
             damaged = true;
             damagedValue = Random.Range(1, 5);
 
-            // Reduce the current health by the damage amount.
+            // Reduce the current health by the damage amount
             currentHealth -= damagedValue;
 
-            // Set the health bar's value to the current health.
+            // Set the health bar's value to the current health
             healthSlider.value = currentHealth;
 
             //guitext
@@ -103,7 +104,7 @@ public class OrbHealth : MonoBehaviour
         StartCoroutine(Die());
     }
 
-    //damage health points popping up from enemy
+    // Damage health points popping up from enemy
     void guiHealth()
     {
         float rand_x = Random.Range(-0.2f, 0.2f);
@@ -173,6 +174,7 @@ public class OrbHealth : MonoBehaviour
             yield return 0;
         }
 
+        // Interpolate orb velocity from dropping to complete stop
         GetComponent<Rigidbody>().angularVelocity = Vector3.Lerp(GetComponent<Rigidbody>().angularVelocity, Vector3.zero, 10000);
         GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, 10000);
     }

@@ -20,6 +20,7 @@ public class Gameflow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        // Hide all images on start
         gameOver.enabled = false;
         gameOverText.enabled = false;
         keyBoard.enabled = false;
@@ -34,7 +35,7 @@ public class Gameflow : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        //Keyboard Menu
+        // Keyboard Menu
         if (!inRetry)
         {
             if (counter == 10)
@@ -43,7 +44,7 @@ public class Gameflow : MonoBehaviour {
             }
             if (keyBoard.enabled)
             {
-                //If "space" pressed, disable keyboard menu and text 
+                // If "space" pressed, disable keyboard menu and text 
                 if (Input.GetKeyDown("space") || (Input.touchCount > 0))
                 {
                     keyBoard.enabled = false;
@@ -52,10 +53,10 @@ public class Gameflow : MonoBehaviour {
             }
         }
         
-        //Pause Menu
+        // Pause Menu
         if ((!inGameOver) && (Input.GetKeyDown("space") || (Input.touchCount > 0)))
         {
-            //Enable or disable pause menu
+            // Enable or disable pause menu
             if (inPause)
             {
                 Time.timeScale = 1;
@@ -72,26 +73,26 @@ public class Gameflow : MonoBehaviour {
             }
         }
 
-        //Gameover Menu
+        // Gameover Menu
         if (playerHealth.isDead)
         {
             GameOver();
         }
 
-        //Win
+        // Win
         if (enemyHealth.currentHealth <= 0)
         {
             Win();
         }
 
-        //Exit Game
+        // Exit Game
         if (Input.GetKey("escape"))
             Application.Quit();
 
         counter++;
     }
 
-    //Enable keyboard menu and text 
+    // Enable keyboard menu and text 
     void GameStart()
     {
         Time.timeScale = 0;
@@ -107,7 +108,7 @@ public class Gameflow : MonoBehaviour {
         gameOverText.enabled = true;
         inGameOver = true;
         
-        //press "space" to retry level
+        // Press "space" to retry level
         if (Input.GetKeyDown("space"))
         {
             inRetry = true;
@@ -123,7 +124,7 @@ public class Gameflow : MonoBehaviour {
         inPause = true;
         inGameOver = true;
 
-        //press "space" to reset level
+        // Press "space" to reset level
         if (Input.GetKeyDown("space"))
         {
             inRetry = false;

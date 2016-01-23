@@ -6,9 +6,9 @@ public class EnemyHealth : MonoBehaviour
 {
     public GameObject GUIPrefab;
     public GameObject head;
-    public int startingHealth = 500;                            // The amount of health the player starts the game with.
-    public int currentHealth;                                   // The current health the player has.
-    public Slider healthSlider;                                 // Reference to the UI's health bar.
+    public int startingHealth = 500;                            // The amount of health the soldier starts the game with
+    public int currentHealth;                                   // The current health the soldier has
+    public Slider healthSlider;                                 // Reference to the UI's health bar
 
     public Image background;
     public Image fill;
@@ -16,10 +16,9 @@ public class EnemyHealth : MonoBehaviour
     public Image other_background;
     public Image other_fill;
     public Image other_name;
-    public Image damageImage;                                   // Reference to an image to flash on the screen on being hurt.
     
-    bool isDead;                                                // Whether the player is dead.
-    bool damaged;                                               // True when the player gets damaged.
+    bool isDead;                                                // Whether the soldier is dead
+    bool damaged;                                               // True when soldier gets damaged
     bool aimed;
     int counter = 0;
     int damagedValue;
@@ -32,6 +31,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Start()
     {
+        // Hide all health bars when start
         currentHealth = startingHealth;
         background.enabled = false;
         fill.enabled = false;
@@ -43,6 +43,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Update()
     {
+        // Show soldier health bar when player aims at it
         if (aimed)
         {
             background.enabled = true;
@@ -54,6 +55,7 @@ public class EnemyHealth : MonoBehaviour
             counter = 0;
 
         }
+        // Hide soldier health bar after a certain period not aimed at
         else if (counter > 200)
         {
             background.enabled = false;
@@ -70,17 +72,17 @@ public class EnemyHealth : MonoBehaviour
 
     void OnHit(RayAndHit rayAndHit)
     {
-        // Set the damaged flag so the screen will flash.
+        // Random amount of damage
         damaged = true;
         damagedValue = Random.Range(1, 5);
 
-        // Reduce the current health by the damage amount.
+        // Reduce the current health by the damage amount
         currentHealth -= damagedValue;
 
-        // Set the health bar's value to the current health.
+        // Set the health bar's value to the current health
         healthSlider.value = currentHealth;
 
-        //guitext
+        // Show guitext
         guiHealth();
 
         // If the soldier has lost all it's health
@@ -101,7 +103,7 @@ public class EnemyHealth : MonoBehaviour
         //Win
     }
     
-    //damage health points popping up from enemy
+    // Damage health points popping up from enemy
     void guiHealth ()
     {
         float rand_x = Random.Range(-0.2f, 0.2f);
