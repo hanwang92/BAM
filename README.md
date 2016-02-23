@@ -7,6 +7,6 @@ To Play:<br />
 3) Double click BAM.exe<br />
 
 To View Demo Video:<br />
-Simply download BAM.WMV<br />
+1) Download BAM.WMV<br />
 
 ![Alt text](https://github.com/hanwang92/BAM/blob/master/BAM.png)
